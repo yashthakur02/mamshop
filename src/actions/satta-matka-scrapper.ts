@@ -260,6 +260,7 @@ export async function updateGames() {
     const timeRegex = /\((\d{2}:\d{2})\) - \((\d{2}:\d{2})\)|\((\d{2}:\d{2}) - - (\d{2}:\d{2})\)|\((\d{2}:\d{2}) -  - (\d{2}:\d{2})\)/;
 
     try {
+
         const document = await getDocument(baseUrl)
         if (!document) {
             return []
