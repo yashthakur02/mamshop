@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Record" ALTER COLUMN "pair" DROP NOT NULL,
+ALTER COLUMN "right_panel" DROP NOT NULL;

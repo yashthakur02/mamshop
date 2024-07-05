@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(300)
+  slug      String   @unique @db.VarChar(300)
+  daysCount String   @default("7") @map("days_count")
+  openTime  String   @map("open_time")
+  closeTime String   @map("close_time")
+  records   Record[]
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([slug])
+}
+
+model Record {
+  id         String   @id @default(cuid())
+  leftPanel  String   @map("left_panel")
+  pair       String?
+  rightPanel String?  @map("right_panel")
+  date       String
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  Game       Game?    @relation(fields: [gameId], references: [id])
+  gameId     String?  @map("game_id")
+}
+
+model User {
+  id       String    @id @default(cuid())
+  name     String?
+  email    String    @unique
+  password String
+  accounts Account[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
