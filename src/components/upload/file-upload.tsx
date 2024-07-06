@@ -6,8 +6,8 @@ import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { CloudUploadIcon } from "lucide-react";
 import { Label } from "../ui/label";
-import { updateDatabase } from "@/actions/scrapperss";
 import { parseCSV } from "@/lib/utils";
+import { onUpdateDatabase } from "@/actions/web-scrapper";
 
 const ACCEPTED_FILE_TYPES = ["text/csv"];
 
@@ -43,7 +43,7 @@ const FileUpload = ({ slug }: { slug: string }) => {
             try {
                 const text = await files[0].text();
                 const records = parseCSV(text);
-                await updateDatabase(slug, records);
+                await onUpdateDatabase(slug, records);
                 console.log(records)
             } catch (error) {
                 console.log("Function Error", error)

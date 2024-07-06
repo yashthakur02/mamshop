@@ -2,15 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { EyeIcon, Loader2, PencilIcon, Trash2Icon } from "lucide-react";
-import { format, isValid, parse } from 'date-fns';
 
 import { Button } from "@/components/ui/button";
-import { getPanelChartFromDPBoss, getPanelCharts, onScrapeAndUpdateGame } from '@/actions/scrapperss';
 import Modal from '../modal';
 import { onDeleteGame, onGetGame } from '@/actions/games';
 import EditGameForm from '../forms/edit-game-form';
 import { Game } from '@/types';
-import { useToast } from '../ui/use-toast';
 
 
 type Props = {

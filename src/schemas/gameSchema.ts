@@ -4,7 +4,7 @@ export const AddGameFormSchema = z.object({
     title: z.string().min(2).max(50),
     openTime: z.string().min(5).max(10),
     closeTime: z.string().min(5).max(10),
-    daysCount: z.string().min(1).max(1),
+    daysCount: z.string().min(1).max(1).optional(),
     slug: z.string().min(1).max(100).optional()
 })
 

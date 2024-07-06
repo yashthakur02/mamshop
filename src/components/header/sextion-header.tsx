@@ -1,7 +1,5 @@
 "use client"
 import React from 'react'
-import { Button } from '../ui/button'
-import { onScrapeAndUpdateGame } from '@/actions/scrapperss'
 
 type Props = {
     title: string,

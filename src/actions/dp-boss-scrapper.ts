@@ -4,7 +4,7 @@ import { cleanText } from "@/lib/scrapper-utils";
 import { formatSpecificDate, parseDate } from "@/lib/utils";
 import { IRecord } from "@/types";
 import { addDays, format, isValid } from "date-fns";
-import { fetchHTML, getDocument, onUpdateDatabase, parseHTML } from "./web-scrapper";
+import { getDocument, onUpdateDatabase } from "./web-scrapper";
 import { promises as fs } from 'fs';
 
 function extractDataFromDBBOSS(document: Document): IRecord[] {

@@ -23,7 +23,7 @@ import { Game } from "@/types";
 import { useRouter } from "next/navigation";
 
 type Props = {
-    data: Game;
+    data: z.infer<typeof AddGameFormSchema>;
     slug: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -35,7 +35,13 @@ const EditGameForm = ({ data, slug, setOpen }: Props) => {
 
     const form = useForm<z.infer<typeof AddGameFormSchema>>({
         resolver: zodResolver(AddGameFormSchema),
-        defaultValues: data,
+        defaultValues: {
+            closeTime: data.closeTime,
+            daysCount: data.daysCount!,
+            openTime: data.openTime,
+            slug: data.slug,
+            title: data.title,
+        },
     });
 
     async function handleFormSubmit(values: z.infer<typeof AddGameFormSchema>) {

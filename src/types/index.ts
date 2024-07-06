@@ -13,7 +13,7 @@ type Base = {
 export interface Game extends Base {
     title: string,
     slug: string,
-    daysCount?: string | null,
+    daysCount?: string,
     openTime: string,
     closeTime: string,
 }
