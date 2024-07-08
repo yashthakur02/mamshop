@@ -22,15 +22,15 @@ export const getDaysOfWeek = (start: string, numberOfDays: number): string[] => 
   }
 
   const days: string[] = [];
-  console.log(startDt, start)
+
   for (let i = 0; i < numberOfDays; i++) {
     const currentDate = addDays(startDt, i);
 
-    console.log('object', currentDate)
+
     const day = format(currentDate, 'EEEE');
     days.push(day);
   }
-  console.log(days)
+
   return days;
 };
 

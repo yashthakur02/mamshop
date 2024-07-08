@@ -1,13 +1,15 @@
-import { onGetResults } from "@/actions/games";
+
 import { onFetchAndUpdateResult } from "@/actions/satta-matka-scrapper";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+export const revalidate = 0
+
 
 export default async function Home() {
 
     const games = await onFetchAndUpdateResult()
 
-    // console.log(games, "List Of Games")
+
     return (
         <main className="min-h-screen my-4 mx-3 space-y-4">
             <Card className=" border-orange-400 overflow-hidden">
@@ -55,8 +57,8 @@ export default async function Home() {
                                         Jodi
                                     </Link>
                                     <div className="flex items-center justify-center flex-col gap-1">
-                                        <h3 className="font-semibold text-red-600 italic text-xl [text-shadow:_0_1px_1px_rgb(0_0_0_/_49%)] ">{game.title}</h3>
-                                        <span className="font-bold text-lg italic">
+                                        <h3 className="font-semibold text-red-600  text-base md:text-xl [text-shadow:_0_1px_1px_rgb(0_0_0_/_49%)] ">{game.title}</h3>
+                                        <span className="font-bold md:text-lg italic text-base">
                                             {game.result ? game.result : "Loading..."}
                                         </span>
                                     </div>

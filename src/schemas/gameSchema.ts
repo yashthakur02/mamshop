@@ -12,8 +12,8 @@ const DATE_REQUIRED_ERROR = "Date is required.";
 
 export const AddRecordFormSchema = z.object({
     leftPanel: z.string().min(3).max(3),
-    rightPanel: z.string().min(3).max(3),
-    pair: z.string().min(2).max(2),
+    rightPanel: z.string().min(3).max(3).optional(),
+    pair: z.string().min(1).max(2),
     date: z.date({ required_error: DATE_REQUIRED_ERROR }).refine(date => !!date, DATE_REQUIRED_ERROR),
     // date: z.string(),
 })

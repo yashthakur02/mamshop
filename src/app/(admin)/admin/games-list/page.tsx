@@ -17,8 +17,6 @@ type Props = {}
 const AllGames = async (props: Props) => {
     const games: Game[] | any = await getGames()
 
-    console.log(games)
-
     return (
         <div className='flex flex-col gap-4'>
             <BreadCrumb />

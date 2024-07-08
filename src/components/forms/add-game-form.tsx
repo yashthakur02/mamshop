@@ -32,7 +32,7 @@ const AddGameForm = (props: Props) => {
     })
 
     async function handleFormSubmit(values: z.infer<typeof AddGameFormSchema>) {
-        console.log("Clicked")
+
         try {
             const title = values.title.toUpperCase();
             const openTime = values.openTime.toUpperCase();

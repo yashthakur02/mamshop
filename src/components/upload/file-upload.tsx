@@ -44,7 +44,7 @@ const FileUpload = ({ slug }: { slug: string }) => {
                 const text = await files[0].text();
                 const records = parseCSV(text);
                 await onUpdateDatabase(slug, records);
-                console.log(records)
+
             } catch (error) {
                 console.log("Function Error", error)
             }

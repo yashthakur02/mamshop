@@ -61,7 +61,7 @@ export function DataTable<TData, TValue>({
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
     })
-    // console.log(table.getAllColumns().length - 1 == 0)
+
     return (
         <div className="space-y-4">
             {toolbar && (

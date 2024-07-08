@@ -1,6 +1,6 @@
 "use server"
 
-import { Game, IRecord, IResult } from "@/types";
+import { Game, IRecord } from "@/types";
 import { getGames, onGetGame, onGetResults, onUpdateGame } from "./games";
 import { getDocument, onUpdateDatabase } from "./web-scrapper";
 import { onCreateRecord, onUpdateRecord } from "./records";
@@ -69,7 +69,7 @@ function extractRecordsData(document: Document): IRecord[] {
 
     rows.forEach((row, rowIndex) => {
         // if (rowIndex === 0) return;
-        console.log("row", rows[0].innerHTML)
+
         const cells = row.querySelectorAll('th, td');
         for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 3) {
             if (cellIndex + 2 < cells.length) {
@@ -111,7 +111,7 @@ function extractRecordsData(document: Document): IRecord[] {
 }
 
 async function extractOnMount(document: Document) {
-    const resultRegex = /\d{3}-\d{2}-\d{3}|\d{3}-\d{1}/g;
+    const resultRegex = /\d{3}-\d{2}-\d{3}|\d{3}-\d{1}|Loading.../g;
     const results = [...document.querySelectorAll('.news2, .fix')];
     const gameResults = results.map((result) => result.querySelector("span[style*='color:black']"));
     const games = results.map((result) => result.querySelector('span'));
@@ -122,23 +122,27 @@ async function extractOnMount(document: Document) {
 
     for (let id = 0; id < games.length; id++) {
         const fetchedGame = games[id];
-        const result = gameResults[id]?.textContent;
+        const resultSpan = gameResults[id];
+        const resultText = resultSpan?.innerHTML;
+
+        // Extract only the specific part
+        const specificResultMatch = resultText?.match(resultRegex);
+        const result = specificResultMatch ? specificResultMatch[0] : '';
+
         const title = fetchedGame?.textContent as string;
         let slug = title.replace(/\s+/g, '-').toLowerCase();
 
-        const resultMatch = result?.match(resultRegex)
         if (titlesToScrape.includes(title)) {
             resultsData.push({
                 title,
-                result: result!,
-                leftPanel: resultMatch ? result?.split("-")[0] || "" : "",
-                pair: result?.split("-")[1] || '',
-                rightPanel: result?.split("-")[2] || '',
+                result: result,
+                leftPanel: result.split("-")[0] || "",
+                pair: result.split("-")[1] || '',
+                rightPanel: result.split("-")[2] || '',
                 slug,
                 date: format(new Date(), "dd/MM/yyyy")
             });
         }
-        console.log("Gettting Result", title, result, resultMatch)
     }
     return resultsData;
 }
@@ -228,7 +232,7 @@ export async function onFetchAndUpdateResult(): Promise<IRecord[]> {
                         gameId: game.id,
                     },
                 });
-                // console.log("EXISTING RECORD", existingRecord, result.date)
+
                 if (existingRecord && game) {
                     await onUpdateRecord(existingRecord?.id, {
                         leftPanel: result.leftPanel || "",
@@ -236,7 +240,7 @@ export async function onFetchAndUpdateResult(): Promise<IRecord[]> {
                         rightPanel: result.rightPanel || "",
                         date: existingRecord.date
                     })
-                } else {
+                } else if (result.leftPanel !== "Loading...") {
                     await onCreateRecord(game.id!, {
                         leftPanel: result.leftPanel,
                         pair: result.pair,
@@ -244,13 +248,12 @@ export async function onFetchAndUpdateResult(): Promise<IRecord[]> {
                         date: result.date,
                     })
                 }
-                console.log("Result", result)
             }
         }
 
-        return await onGetResults();
+        return results
     } catch (error) {
-        console.log(error, "hhhhhhhhhhhhhhhhhh");
+        console.error(error, "hhhhhhhhhhhhhhhhhh");
         return await onGetResults();
     }
 }

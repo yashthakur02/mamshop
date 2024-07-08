@@ -1,11 +1,11 @@
 import { onGetRecord } from '@/actions/records';
+import ScrollTo from '@/components/scroll';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getDaysOfWeek, parseDate } from '@/lib/utils';
 import { IRecord } from '@/types';
 import { addDays, format } from 'date-fns';
 import React from 'react';
 
-type Props = {};
 
 const chunkArray = (arr: IRecord[], size: number) => {
     const chunks = [];
@@ -55,9 +55,9 @@ const Record = async ({ params }: { params: { slug: string } }) => {
 
     const startDate = data.records.reverse()[0].date;
     const days = startDate ? getDaysOfWeek(data.records?.[0].date, data.daysCount) : [];
-    console.log(startDate, data.records?.[0].date, data.records.reverse()[0])
+
     const chunkedData = chunkArray(data.records.reverse() || [], days.length);
-    console.log(startDate, data.records?.[0].date)
+
     const generateDate = (datestr: string) => {
         const startDate = parseDate(datestr);
         const endDate = addDays(startDate!, data.daysCount - 1)
@@ -65,26 +65,16 @@ const Record = async ({ params }: { params: { slug: string } }) => {
         return date;
     }
 
-    // console.log(chunkedData)
 
     return (
         <div className='max-w-4xl md:mx-auto min-h-screen space-y-4 my-4'>
-            <div className='mx-3 lg:mx-0'>
-                <Card className="overflow-hidden border-pink-300">
-                    <CardHeader className="items-center justify-center p-2 border-b border-b-pink-300 bg-pink-200">
-                        <CardTitle className="text-xl italic [text-shadow:_0_1px_0_rgb(255_0_0_/_40%)] font-semibold">Today Satta Matka Lucky Number</CardTitle>
+            <div className='mx-3 lg:mx-0 flex flex-col items-center gap-2'>
+                <Card className="overflow-hidden border-orange-300">
+                    <CardHeader className="items-center justify-center p-2 bg-yellow-400">
+                        <CardTitle className="text-xl [text-shadow:_0_1px_0_rgb(255_0_0_/_40%)] font-semibold uppercase">{params.slug.split("-").join(" ")}</CardTitle>
                     </CardHeader>
-                    <CardContent className="py-3 grid grid-cols-2 italic font-bold">
-                        <div className="flex flex-col items-center justify-center border-r border-r-pink-300">
-                            <h4 className="text-red-500 [text-shadow:_0_2px_2px_rgb(0_0_0_/_40%)] text-lg">Shubh Ank</h4>
-                            <span className="[text-shadow:_0_1px_0_rgb(255_0_0_/_40%)]">1-2-3-4</span>
-                        </div>
-                        <div className="flex flex-col items-center justify-center [text-shadow:_0_2px_2px_rgb(0_0_0_/_40%)]">
-                            <h3 className="text-red-500 italic text-lg font-bold">Final Ank</h3>
-                            <span className="[text-shadow:_0_1px_0_rgb(255_0_0_/_40%)]">K-2, M-6</span>
-                        </div>
-                    </CardContent>
                 </Card>
+                <ScrollTo position='bottom' title='Bottom' />
             </div>
             {noRecords ? (
                 <Card className="overflow-hidden border-red-300">
@@ -106,7 +96,7 @@ const Record = async ({ params }: { params: { slug: string } }) => {
                                 return (
                                     <tr className='border-2' key={chunkIndex}>
                                         {isPanelChart && (
-                                            <td className="text-red text-[10px] md:text-sm text-center font-semibold py-2 flex md:block w-full px-0 justify-center">
+                                            <td className="text-red text-[8px] md:text-sm text-center font-semibold py-2 flex md:block w-full px-[2px] justify-center">
                                                 {chunk[0].date} <br /> to <br /> {generateDate(chunk[0].date!)}
                                             </td>
                                         )}
@@ -116,7 +106,7 @@ const Record = async ({ params }: { params: { slug: string } }) => {
                                                     {isPanelChart && (
                                                         <>
                                                             <span className="text-upright writing-vertical-lr text-[8px] md:text-sm xs:text-[10px] font-medium">{data.leftPanel.replace(/\s+/g, '')}</span>
-                                                            <span className=' font-bold'>{data.pair}</span>
+                                                            <span className=' font-bold text-[8px] xs:text-sm'>{data.pair}</span>
                                                             <span className="text-upright writing-vertical-lr text-[10px] md:text-sm font-medium">{data.rightPanel!.replace(/\s+/g, '')}</span>
                                                         </>
                                                     )}
@@ -131,6 +121,7 @@ const Record = async ({ params }: { params: { slug: string } }) => {
                     </table>
                 </>
             )}
+            <ScrollTo position='top' title='Top' />
         </div>
     );
 };

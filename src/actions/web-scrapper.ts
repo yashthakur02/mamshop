@@ -1,32 +1,12 @@
 "use server"
-import { parse, format, addDays, isValid } from 'date-fns';
 import prisma from "@/lib/db";
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
 import { revalidatePath } from "next/cache";
-import { promises as fs } from 'fs';
 import { IRecord } from '@/types';
-import { onUpdateRecord } from './records';
-
-
-//Fetching HTML from the Website
-async function fetchHTML(url: string): Promise<string> {
-    try {
-        const response = await axios.get(url);
-        return response.data;
-    } catch (error) {
-        throw new Error(`Failed to fetch HTML from ${url}: ${error}`);
-    }
-}
-
-//Parsing Html Document
-async function parseHTML(html: string): Promise<Document | null> {
-    const dom = new JSDOM(html);
-    return dom.window.document;
-}
 
 export async function getDocument(url: string) {
-    console.log(url)
+
     try {
         const response = await axios.get(url);
         const dom = new JSDOM(response.data);
@@ -52,37 +32,23 @@ export async function onUpdateDatabase(slug: string, data: IRecord[]): Promise<v
         return;
     }
 
-    const existingRecordsMap = new Map(existingGame.records.map(record => [record.date, record])); //Creating Existing Records
+    const existingRecordsMap = new Map(existingGame.records.map(record => [record.date, record]));
 
-    for (let i = 0; i < data.length; i += BATCH_SIZE) {
-        const batch = data.slice(i, i + BATCH_SIZE);
+    // Filter out records that already exist
+    const newRecords = data.filter(recordData => !existingRecordsMap.has(recordData.date));
 
-        await prisma.$transaction(async (prisma) => {
-            for (const recordData of batch) {
-                const existingRecord = existingRecordsMap.get(recordData.date);
+    for (let i = 0; i < newRecords.length; i += BATCH_SIZE) {
+        const batch = newRecords.slice(i, i + BATCH_SIZE);
 
-                // if (existingRecord) {
-                //     await onUpdateRecord(existingRecord.id, recordData)
-                // } else {
-                //     await prisma.record.createMany({
-                //         data: {
-                //             ...recordData,
-                //             gameId: existingGame.id
-                //         }
-                //     })
-                // }
-
-                if (!existingRecord) {
-                    await prisma.record.createMany({
-                        data: {
-                            ...recordData,
-                            gameId: existingGame.id
-                        }
-                    })
-                }
-            }
-        }, { timeout: 10000 }); // Increasing the timeout to 10 seconds
+        await prisma.record.createMany({
+            data: batch.map(recordData => ({
+                ...recordData,
+                gameId: existingGame.id
+            })),
+            skipDuplicates: true // Optional: skips records with duplicate primary keys
+        });
     }
+
     revalidatePath(`/admin/record/${slug}`);
 }
 

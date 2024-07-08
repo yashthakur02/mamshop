@@ -73,7 +73,7 @@ export const recordsColumns: ColumnDef<IRecord>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             const record = row.original
-            console.log(record, ">>>>>>Record<<<<<<<")
+
             return (
                 <div className="flex items-center justify-center space-x-3">
                     <Link href={`/admin/records/${record.slug}`} className={cn(buttonVariants({ variant: "secondary", size: "icon" }), "bg-orange-500 hover:bg-orange-500/80")}>

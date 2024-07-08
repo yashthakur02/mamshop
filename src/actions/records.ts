@@ -20,7 +20,6 @@ export const onGetRecords = async (slug: string) => {
             }
         })
 
-        // console.log(record)
         return record
     } catch (error) {
         console.log(error)
@@ -36,6 +35,7 @@ export const onGetRecord = async (slug: string) => {
             select: {
                 id: true,
                 daysCount: true,
+                title: true,
                 records: true,
             },
         })
@@ -133,50 +133,3 @@ export async function onGetRecordById(recordId: string) {
         console.log(error)
     }
 }
-
-
-//TODO DELETE THIS
-// export async function onGetResult(gameId: string) {
-//     try {
-//         const record = await prisma.record.findFirst({
-//             where: {
-//                 gameId
-//             },
-//             select: {
-//                 id: true,
-//                 date: true,
-//                 leftPanel: true,
-//                 rightPanel: true,
-//                 pair: true,
-//                 Game: {
-//                     select: {
-//                         slug: true,
-//                         title: true,
-//                         closeTime: true,
-//                         openTime: true,
-//                     }
-//                 }
-//             },
-//             orderBy: {
-//                 id: "desc"
-//             }
-//         });
-
-//         let result = "";
-
-//         if (record?.leftPanel && record?.rightPanel) {
-//             result = `${record.leftPanel}-${genAnk(record.leftPanel)}${genAnk(record.rightPanel)}-${record.rightPanel}`;
-//         } else if (record?.leftPanel) {
-//             result = `${record.leftPanel}-${genAnk(record.leftPanel)}`;
-//         }
-
-//         return {
-//             ...record,
-//             result
-//         };
-
-//     } catch (error) {
-//         console.error('Error fetching result:', error);
-//         throw error; // Re-throw the error if you want to handle it further up the call stack
-//     }
-// }

@@ -53,7 +53,7 @@ export const recordColumns: ColumnDef<IRecord>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             const record = row.original
-            console.log(record)
+
             return (
                 <div className="flex items-center justify-center">
                     <RecordsAction record={record} />

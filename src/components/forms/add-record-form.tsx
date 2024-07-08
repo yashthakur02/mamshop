@@ -29,15 +29,13 @@ const AddRecordForm = ({ gameId }: Props) => {
     const form = useForm<z.infer<typeof AddRecordFormSchema>>({
         resolver: zodResolver(AddRecordFormSchema),
         defaultValues: {
-            leftPanel: "",
-            rightPanel: "",
-            pair: "",
+
             date: new Date(),
         },
     })
 
     async function handleFormSubmit(values: z.infer<typeof AddRecordFormSchema>) {
-        console.log(values)
+
         const formattedDate = values.date ? format(values.date, "dd/MM/yyyy") : format(new Date(), "dd/MM/yyyy");
         try {
             setLoading(true)
@@ -129,7 +127,7 @@ const AddRecordForm = ({ gameId }: Props) => {
                         <FormItem>
                             <FormLabel>Jodi</FormLabel>
                             <FormControl>
-                                <Input placeholder="Close Time" {...field} disabled />
+                                <Input placeholder="Close Time" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

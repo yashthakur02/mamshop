@@ -110,7 +110,6 @@ export const onGetResults = async (): Promise<IRecord[]> => {
                 }
             });
             let result = ""
-
             if (firstRecord?.leftPanel && firstRecord?.rightPanel) {
                 const pair = `${genAnk(firstRecord.leftPanel)}${genAnk(firstRecord.rightPanel)}`
                 result = `${firstRecord.leftPanel}-${pair}-${firstRecord.rightPanel}`;
@@ -120,21 +119,10 @@ export const onGetResults = async (): Promise<IRecord[]> => {
             } else if (firstRecord?.leftPanel) {
                 const pair = genAnk(firstRecord.leftPanel)
                 result = `${firstRecord.leftPanel}-${pair}`;
+            } else {
+                result = ""
             }
-            // if (firstRecord) {
-            //     return {
-            //         id: game.id,
-            //         title: game.title,
-            //         date: firstRecord.date,
-            //         slug: game.slug,
-            //         result,
 
-            //         openTime: game.openTime,
-            //         closeTime: game.closeTime
-            //     };
-            // } else {
-            //     return null;
-            // }
             return {
                 id: game.id,
                 title: game.title,
@@ -156,3 +144,4 @@ export const onGetResults = async (): Promise<IRecord[]> => {
         return [];
     }
 };
+
