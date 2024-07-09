@@ -37,7 +37,7 @@ export default async function Home() {
                     </div>
                     <div className="flex flex-col items-center justify-center [text-shadow:_0_2px_2px_rgb(0_0_0_/_40%)] ">
                         <h3 className="text-red-500 *:italic sm:text-lg text-base font-bold ">Final Ank</h3>
-                        <span className="[text-shadow:_0_1px_0_rgb(255_0_0_/_40%)] sm:text-base text-sm">K-2, M-6</span>
+                        <span className="[text-shadow:_0_1px_0_rgb(255_0_0_/_40%)] sm:text-base text-sm">K-8, M-5</span>
                     </div>
                 </CardContent>
             </Card>
