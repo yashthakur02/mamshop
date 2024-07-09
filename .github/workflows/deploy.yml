@@ -1,25 +1,26 @@
 name: CI/CD
 
-# Trigger the workflow on push and
-# pull request events on the master branch
+# Trigger the workflow on push and pull request events on the main branch
 on:
   push:
     branches: ["main"]
   pull_request:
     branches: ["main"]
 
-# Authenticate to the the server via ssh
-# and run our deployment script
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Deploy to Server
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: "cd ~/mamshop && ./.scripts/deploy.sh"
+          script: |
+            cd ~/mamshop
+            ./.scripts/deploy.sh
