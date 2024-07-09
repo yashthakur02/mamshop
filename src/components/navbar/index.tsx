@@ -17,7 +17,7 @@ const Navbar = (props: Props) => {
         <header className='bg-violet-300/20 p-3 sticky top-0 w-full right-0 left-0 backdrop-blur-lg'>
             <div className='flex justify-between items-center'>
                 <div className='flex items-center'>
-                    <Link href={'/'} className='text-orange-600 text-2xl font-medium'>
+                    <Link href={'/'} className='text-orange-600 sm:text-2xl text-base font-medium'>
                         <span className='text-black font-bold'>Mam</span>Shop
                     </Link>
                 </div>

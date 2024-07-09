@@ -67,39 +67,49 @@ function extractRecordsData(document: Document): IRecord[] {
     const rows = tbody.querySelectorAll('tr');
     let lastStartDate: Date | null = null;
 
-    rows.forEach((row, rowIndex) => {
-        // if (rowIndex === 0) return;
-
+    rows.forEach((row) => {
         const cells = row.querySelectorAll('th, td');
+
         for (let cellIndex = 0; cellIndex < cells.length; cellIndex += 3) {
             if (cellIndex + 2 < cells.length) {
-                const dateRangeCell = cells[cellIndex].innerHTML.replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ');
+                // Extracting and cleaning data from the cells
+                const dateRangeCell = cells[cellIndex].textContent?.replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ').trim() || '';
                 const dateRange = dateRangeCell.match(/(\d{1,2}[-/]\d{1,2}[-/]\d{2,4})/g);
 
-                const leftPanel = cleanText(cells[cellIndex + 1].innerHTML);
-                const pair = cleanText(cells[cellIndex + 2]?.innerHTML);
-                const rightPanel = cleanText(cells[cellIndex + 3]?.innerHTML);
+                const leftPanel = cleanText(cells[cellIndex + 1].textContent || '');
+                const pair = cleanText(cells[cellIndex + 2]?.textContent || '');
+                const rightPanel = cleanText(cells[cellIndex + 3]?.textContent || '');
 
+                // Skip empty rows
+                if (!leftPanel && !pair && !rightPanel) {
+                    continue;
+                }
 
-                if (leftPanel || rightPanel || pair) {
-                    let date: string;
+                // Combine panels correctly
+                const combinedLeftPanel = leftPanel.replace(/\s+/g, '');
+                const combinedPair = pair.replace(/\s+/g, '');
+                const combinedRightPanel = rightPanel.replace(/\s+/g, '');
 
-                    if (dateRange && dateRange.length === 2) {
-                        date = formatSpecificDate(dateRange[0]);
-                        lastStartDate = parseDate(dateRange[0]);
-                    } else if (lastStartDate) {
-                        lastStartDate = addDays(lastStartDate, 1);
-                        date = format(lastStartDate, 'dd/MM/yyyy');
-                    } else {
-                        date = '';
-                    }
+                // Determine date
+                let date: string;
+                if (dateRange && dateRange.length === 2) {
+                    date = formatSpecificDate(dateRange[0]);
+                    lastStartDate = parseDate(dateRange[0]);
+                } else if (lastStartDate) {
+                    lastStartDate = addDays(lastStartDate, 1);
+                    date = format(lastStartDate, 'dd/MM/yyyy');
+                } else {
+                    date = '';
+                }
 
-                    if (isValid(lastStartDate)) {
+                if (isValid(lastStartDate)) {
+                    // Only push if there's actual data
+                    if (combinedLeftPanel || combinedPair || combinedRightPanel) {
                         const rowData: IRecord = {
-                            leftPanel,
-                            pair,
-                            rightPanel,
-                            date
+                            date,
+                            leftPanel: combinedLeftPanel,
+                            pair: combinedPair,
+                            rightPanel: combinedRightPanel
                         };
                         data.push(rowData);
                     }
@@ -107,8 +117,10 @@ function extractRecordsData(document: Document): IRecord[] {
             }
         }
     });
+
     return data;
 }
+
 
 async function extractOnMount(document: Document) {
     const resultRegex = /\d{3}-\d{2}-\d{3}|\d{3}-\d{1}|Loading.../g;
@@ -251,7 +263,7 @@ export async function onFetchAndUpdateResult(): Promise<IRecord[]> {
             }
         }
 
-        return results
+        return await onGetResults()
     } catch (error) {
         console.error(error, "hhhhhhhhhhhhhhhhhh");
         return await onGetResults();

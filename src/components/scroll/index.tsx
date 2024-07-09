@@ -9,12 +9,15 @@ type Props = {
 
 const ScrollTo = ({ position, title }: Props) => {
     return (
-        <Button variant={"outline"} size={"sm"} onClick={() => {
-            window.scrollTo({
-                top: position === "bottom" ? (document.documentElement.scrollHeight - 50) : 0,
-                behavior: 'smooth'
-            })
-        }}>
+        <Button
+            variant={"outline"}
+            size={"sm"}
+            onClick={() => {
+                window.scrollTo({
+                    top: position === "bottom" ? (document.documentElement.scrollHeight - 50) : 0,
+                    behavior: 'smooth'
+                })
+            }}>
             Go to {title}
         </Button>
     )

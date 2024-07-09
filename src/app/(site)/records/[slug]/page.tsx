@@ -68,14 +68,14 @@ const Record = async ({ params }: { params: { slug: string } }) => {
 
     return (
         <div className='max-w-4xl md:mx-auto min-h-screen space-y-4 my-4'>
-            <div className='mx-3 lg:mx-0 flex flex-col items-center gap-2'>
+            <div className='mx-3 lg:mx-0 flex flex-col gap-2'>
                 <Card className="overflow-hidden border-orange-300">
                     <CardHeader className="items-center justify-center p-2 bg-yellow-400">
                         <CardTitle className="text-xl [text-shadow:_0_1px_0_rgb(255_0_0_/_40%)] font-semibold uppercase">{params.slug.split("-").join(" ")}</CardTitle>
                     </CardHeader>
                 </Card>
-                <ScrollTo position='bottom' title='Bottom' />
             </div>
+            <ScrollTo position='bottom' title='Bottom' />
             {noRecords ? (
                 <Card className="overflow-hidden border-red-300">
                     <CardContent className='p-5 text-center font-semibold text-red-500'>No Record Found</CardContent>
