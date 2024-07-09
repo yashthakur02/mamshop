@@ -14,6 +14,6 @@ echo "Creating Production Build..."
 pnpm run build
 
 echo "PM2 Reload"
-pm2 reload app_name/id
+pm2 reload mamshop
 
 echo "Deployment Finished!"
